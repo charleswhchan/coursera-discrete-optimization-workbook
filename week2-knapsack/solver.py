@@ -27,16 +27,43 @@ def solve_it(input_data):
     weight = 0
     taken = [0]*len(items)
 
-    for item in items:
-        if weight + item.weight <= capacity:
-            taken[item.index] = 1
-            value += item.value
-            weight += item.weight
+    # for item in items:
+    #     if weight + item.weight <= capacity:
+    #         taken[item.index] = 1
+    #         value += item.value
+    #         weight += item.weight
+
+    value = O(capacity, item_count, items, taken)
+    # print(taken)
     
     # prepare the solution in the specified output format
     output_data = str(value) + ' ' + str(0) + '\n'
     output_data += ' '.join(map(str, taken))
     return output_data
+
+def O(k, j, items, taken):
+    array_index = j - 1
+    # print(j, "==>", taken)
+    if (j == 0):
+        return 0
+    elif items[array_index].weight <= k:
+        a = O(k, j-1, items, taken)
+        b = items[array_index].value + O(k-items[array_index].weight, j-1, items, taken)
+
+        if b > a:
+            # print("b>a index {} a {} b {}".format(array_index, a, b))
+
+            taken[array_index] = 1
+            return b
+        else:
+            # print("a>b index {} a {} b {}".format(array_index, a, b))
+
+            taken[array_index] = 0
+            return a
+    else:
+        taken[array_index] = 0
+
+        return O(k, j-1, items, taken)
 
 
 if __name__ == '__main__':
